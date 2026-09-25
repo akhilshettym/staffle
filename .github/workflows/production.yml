@@ -1,0 +1,93 @@
+# name: production
+
+# on:
+#   pull_request:
+#     branches: ["master"]
+
+# jobs:
+#   secret-scan:
+#     name: Secret Scanning (Gitleaks)
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v5
+#         with:
+#           fetch-depth: 0
+
+#       - name: Run Gitleaks
+#         uses: gitleaks/gitleaks-action@v3
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#   frontend-checks:
+#     name: frontend checks
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         working=directory: ./frontend
+#       steps:
+#         - name: Checkout Repository
+#         uses: actions/checkout@v5
+#         with:
+#           node-version: "24"
+#           cache: "npm"
+#           cache-dependency-path: "./frontend/package-lock.json"
+
+#         - name: Setup Node.js
+#         uses: actions/setup-node@v5
+#         with:
+#           node-version: "24"
+#           cache: "npm"
+#           cache-dependency-path: "./frontend/package-lock.json"
+
+#         - name: Install Dependencies
+#         run: npm ci
+
+#         - name: Security Audit
+#         run: npm audit
+
+#         - name: Check Formatting
+#         run: npm run format:check
+
+#         - name: Run Linter
+#         run: npm run lint
+
+#         - name: Run Jest Tests
+#         run: npm run jest
+
+  
+#   backend-checks:
+#     name: backend checks
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         working=directory: ./backend
+#       steps:
+#         - name: Checkout Repository
+#         uses: actions/checkout@v5
+#         with:
+#           node-version: "24"
+#           cache: "npm"
+#           cache-dependency-path: "./backend/package-lock.json"
+
+#         - name: Setup Node.js
+#         uses: actions/setup-node@v5
+#         with:
+#           node-version: "24"
+#           cache: "npm"
+#           cache-dependency-path: "./backend/package-lock.json"
+
+#         - name: Install Dependencies
+#         run: npm ci
+
+#         - name: Security Audit
+#         run: npm audit
+
+#         - name: Check Formatting
+#         run: npm run format:check
+
+#         - name: Run Linter
+#         run: npm run lint
+
+#         - name: Run Jest Tests
+#         run: npm run jest

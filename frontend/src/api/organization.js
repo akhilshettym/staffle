@@ -6,7 +6,7 @@ export async function updateOrganization({ orgId, ...payload }) {
     validatePayload(payload);
 
     try {
-        const res = await api.patch(`${import.meta.env.VITE_API_ORGANIZATION_UPDATE_ORGANIZATION}/${orgId}`, payload);
+        const res = await api.patch(`/api/organization/update-organization/${orgId}`, payload);
         return res.data;
     } catch (error) {
         handleApiError(error);
@@ -14,6 +14,6 @@ export async function updateOrganization({ orgId, ...payload }) {
 }
 
 export async function getOrganizationDetails() {
-    const res = await api.get(`${import.meta.env.VITE_API_ORGANIZATION_GET_ORGANIZATION_DETAILS}`);
+    const res = await api.get(`/api/organization/get-organization-details`);
     return res.data;
 }
