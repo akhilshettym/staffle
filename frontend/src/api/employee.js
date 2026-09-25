@@ -3,7 +3,7 @@ import { handleApiError, validateId, validatePayload } from "./helpers/apiHelper
 
 export async function getOrganizationUsers() {
     try {
-        const res = await api.get(`${import.meta.env.VITE_API_EMPLOYEE_GET_EMPLOYEE}`);
+        const res = await api.get(`/api/employee/get-employees`);
         return res.data;
     } catch (error) {
         handleApiError(error);
@@ -12,7 +12,7 @@ export async function getOrganizationUsers() {
 
 export async function getOrganizationInactiveUsers() {
     try {
-        const res = await api.get(`${import.meta.env.VITE_API_EMPLOYEE_GET_INACTIVE_EMPLOYEES}`);
+        const res = await api.get(`/api/employee/get-inactive-employees`);
         return res.data;
 
     } catch (error) {
@@ -23,7 +23,7 @@ export async function getOrganizationInactiveUsers() {
 export async function acceptTask(taskId) {
     validateId(taskId, "Task ID");
 
-    const res = await api.patch(`${import.meta.env.VITE_API_EMPLOYEE_ACCEPT_TASKS}/${taskId}`);
+    const res = await api.patch(`/api/employee/tasks/accept-task/${taskId}`);
     return res.data;
 }
 
@@ -31,20 +31,20 @@ export async function requestRejection({ taskId, ...payload }) {
     validateId(taskId, "Task ID");
     validatePayload(payload);
 
-    const res = await api.patch(`${import.meta.env.VITE_API_EMPLOYEE_REJECT_TASKS}/${taskId}`, payload);
+    const res = await api.patch(`/api/employee/tasks/reject-task/${taskId}`, payload);
     return res.data;
 }
 
 export async function markAsCompleted(taskId) {
     validateId(taskId, "Task ID");
 
-    const res = await api.patch(`${import.meta.env.VITE_API_EMPLOYEE_MARK_AS_COMPLETED}/${taskId}`);
+    const res = await api.patch(`/api/employee/tasks/mark-as-completed/${taskId}`);
     return res.data;
 }
 
 export async function markAsFailed(taskId) {
     validateId(taskId, "Task ID");
 
-    const res = await api.patch(`${import.meta.env.VITE_API_EMPLOYEE_MARK_AS_FAILED}/${taskId}`);
+    const res = await api.patch(`/api/employee/tasks/mark-as-failed/${taskId}`);
     return res.data;
 }

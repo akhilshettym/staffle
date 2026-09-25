@@ -6,7 +6,7 @@ export async function updateAdmin({ empId, ...payload }) {
     validatePayload(payload);
 
     try {
-        const res = await api.patch(`${import.meta.env.VITE_API_ADMIN_UPDATE_ADMIN}/${empId}`, payload);
+        const res = await api.patch(`/api/admin/update-admin/${empId}`, payload);
         return res.data;
     } catch (error) {
         handleAdminError(error);
@@ -18,7 +18,7 @@ export async function reviewRejection({ taskId, ...payload }) {
     validatePayload(payload);
 
     try {
-        const res = await api.patch(`${import.meta.env.VITE_API_ADMIN_REVIEW_TASK_REJECTION}/${taskId}`, payload);
+        const res = await api.patch(`/api/admin/tasks/review-task-rejection/${taskId}`, payload);
         return res.data;
     } catch (error) {
         handleAdminError(error);
@@ -29,7 +29,7 @@ export async function addEmployee(payload) {
     validatePayload(payload);
 
     try {
-        const res = await api.post(`${import.meta.env.VITE_API_ADMIN_ADD_EMPLOYEE}`, payload);
+        const res = await api.post(`/api/admin/add-employee`, payload);
         return res.data;
     } catch (error) {
         handleApiError(error);
@@ -41,7 +41,7 @@ export async function updateEmployee({ empId, ...payload }) {
     validatePayload(payload);
 
     try {
-        const res = await api.patch(`${import.meta.env.VITE_API_EMPLOYEE_UPDATE_EMPLOYEE}/${empId}`, payload);
+        const res = await api.patch(`/api/employee/update-employee/${empId}`, payload);
         return res.data;
     } catch (error) {
         handleApiError(error);
@@ -52,7 +52,7 @@ export async function deactivateEmployee({ empId }) {
     validateId(empId, "Employee ID (empId)");
 
     try {
-        const res = await api.patch(`${import.meta.env.VITE_API_ADMIN_DEACTIVATE_EMPLOYEE}/${empId}`);
+        const res = await api.patch(`/api/admin/deactivate-employee/${empId}`);
         return res.data;
     } catch (error) {
         handleApiError(error);
@@ -63,7 +63,7 @@ export async function reactivateEmployee({ empId }) {
     validateId(empId, "Employee ID (empId)");
 
     try {
-        const res = await api.patch(`${import.meta.env.VITE_API_ADMIN_REACTIVATE_EMPLOYEE}/${empId}`);
+        const res = await api.patch(`/api/admin/reactivate-employee/${empId}`);
         return res.data;
     } catch (error) {
         handleApiError(error);
@@ -73,7 +73,7 @@ export async function reactivateEmployee({ empId }) {
 export async function createTask(payload) {
     validatePayload(payload);
 
-    const res = await api.post(`${import.meta.env.VITE_API_ADMIN_CREATE_TASKS}`, payload);
+    const res = await api.post(`/api/admin/tasks/create-task`, payload);
     return res.data;
 }
 
@@ -82,7 +82,7 @@ export async function updateTask({ taskId, ...payload }) {
     validatePayload(payload);
 
     try {
-        const res = await api.patch(`${import.meta.env.VITE_API_ADMIN_UPDATE_TASKS}/${taskId}`, payload);
+        const res = await api.patch(`/api/admin/tasks/update-task/${taskId}`, payload);
         return res.data;
         
     } catch (error) {
@@ -94,7 +94,7 @@ export async function deleteTask({ taskId }) {
     validateId(taskId, "Task ID");
 
     try {
-        const res = await api.delete(`${import.meta.env.VITE_API_ADMIN_DELETE_TASK}/${taskId}`);
+        const res = await api.delete(`/api/admin/tasks/delete-task/${taskId}`);
         return res.data;
     } catch (error) {
         handleApiError(error);
