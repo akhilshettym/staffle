@@ -1,4 +1,5 @@
 import taskModel from "../../models/task.model.js";
+import userModel from "../../models/user.model.js";
 
 export const reviewTaskRejectionController = async (req, res) => {
     
@@ -12,6 +13,10 @@ export const reviewTaskRejectionController = async (req, res) => {
                 success: false,
                 message: "Only admin can review rejection"
             });
+        }
+
+        if (!["APPROVED", "REJECTED"].includes(decision)) {
+            return res.status(400).json({ success: false, message: "Decision must be APPROVED or REJECTED" });
         }
 
         const task = await taskModel.findOne({
@@ -31,6 +36,15 @@ export const reviewTaskRejectionController = async (req, res) => {
             task.rejection.status = "APPROVED";
 
             if (reassignTo) {
+                const employee = await userModel.findOne({
+                    _id: reassignTo,
+                    organizationId: loggedInUser.organizationId,
+                    role: "EMPLOYEE",
+                    employmentStatus: "ACTIVE",
+                });
+                if (!employee) {
+                    return res.status(400).json({ success: false, message: "Reassignment requires an active organization employee" });
+                }
                 task.assignedTo = reassignTo;
                 task.status = "NEW";
             } else {
@@ -39,7 +53,7 @@ export const reviewTaskRejectionController = async (req, res) => {
 
         } else if (decision === "REJECTED") {
 
-            if (!adminReason) {
+            if (typeof adminReason !== "string" || adminReason.trim().length < 10) {
                 return res.status(400).json({
                     success: false,
                     message: "Admin reason required"
@@ -47,7 +61,7 @@ export const reviewTaskRejectionController = async (req, res) => {
             }
 
             task.rejection.status = "REJECTED";
-            task.rejection.adminReason = adminReason;
+            task.rejection.adminReason = adminReason.trim();
 
             task.status = "NEW";
         }
@@ -67,7 +81,6 @@ export const reviewTaskRejectionController = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error reviewing rejection",
-            error: error.message
         });
     }
 };

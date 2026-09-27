@@ -7,6 +7,10 @@ export const updateEmployeeController = async (req, res) => {
         const loggedInUser = req.user;
 
         const { firstName, lastName, email, dateOfBirth, designation } = req.body;
+
+        if (loggedInUser.role === "EMPLOYEE" && loggedInUser._id.toString() !== employeeId) {
+            return res.status(403).json({ success: false, message: "You can only update your own profile" });
+        }
         
         const query =
             loggedInUser.role === "SUPER_ADMIN"
@@ -50,8 +54,9 @@ export const updateEmployeeController = async (req, res) => {
         }
 
         // email check
-        if (email && email !== employee.email) {
-            const existingEmail = await userModel.findOne({ email });
+        if (typeof email === "string" && email.toLowerCase() !== employee.email) {
+            const normalizedEmail = email.trim().toLowerCase();
+            const existingEmail = await userModel.findOne({ email: normalizedEmail });
 
             if (existingEmail) {
                 return res.status(409).json({
@@ -60,7 +65,7 @@ export const updateEmployeeController = async (req, res) => {
                 });
             }
 
-            employee.email = email;
+            employee.email = normalizedEmail;
         }
 
         if (firstName !== undefined) employee.firstName = firstName;
@@ -92,7 +97,6 @@ export const updateEmployeeController = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error updating employee details",
-            error: error.message,
         });
     }
 };

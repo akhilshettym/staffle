@@ -1,11 +1,12 @@
 import 'dotenv/config';
 import app from "./src/app.js";
+import mongoose from "mongoose";
 import connectDB from "./src/config/db.js";
 import startOverdueTaskJob from "./src/jobs/taskOverdue.js";
 import { createSuperAdmin } from "./src/utils/createSuperAdmin.js";
 import startInactiveEmployeeCleanupJob from './src/jobs/inactiveEmployee.js';
 
-const requiredEnvVars = ["PORT", "NODE_ENV", "SUPER_ADMIN_FIRST_NAME", "CLIENT_URL", "SUPER_ADMIN_EMAIL", "SUPER_ADMIN_PASSWORD", "JWT_SECRET", "MONGO_URI"];
+const requiredEnvVars = ["NODE_ENV", "SUPER_ADMIN_FIRST_NAME", "CLIENT_URL", "SUPER_ADMIN_EMAIL", "SUPER_ADMIN_PASSWORD", "JWT_SECRET", "MONGO_URI"];
 const missingVars = requiredEnvVars.filter((v) => !process.env[v]);
 
 if (missingVars.length > 0) {
@@ -18,9 +19,8 @@ if (missingVars.length > 0) {
 }
 
 if (process.env.JWT_SECRET.length < 32) {
-    console.warn(
-        "WARNING: JWT_SECRET is shorter than recommended (32+ characters). Consider using: openssl rand -base64 32",
-    );
+    console.error("FATAL ERROR: JWT_SECRET must be at least 32 characters long");
+    process.exit(1);
 }
 
 try {
@@ -44,6 +44,8 @@ const server = app.listen(PORT, () => {
     console.log(`Server running at port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV}`);
 });
+server.requestTimeout = 30_000;
+server.headersTimeout = 35_000;
 
 const gracefulShutdown = (signal) => {
     console.log(`\n${signal} received. Starting graceful shutdown...`);

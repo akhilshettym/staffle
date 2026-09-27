@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import crypto from "node:crypto";
 
 const taskSchema = new mongoose.Schema(
     {
@@ -6,6 +7,7 @@ const taskSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
+            default: () => crypto.randomUUID(),
             trim: true,
         },
 

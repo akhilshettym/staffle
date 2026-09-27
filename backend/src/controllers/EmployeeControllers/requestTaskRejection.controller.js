@@ -7,7 +7,7 @@ export const requestTaskRejectionController = async (req, res) => {
         const { reason } = req.body;
         const loggedInUser = req.user;
 
-        if (!reason || reason.trim().length < 10) {
+        if (typeof reason !== "string" || reason.trim().length < 10) {
             return res.status(400).json({
                 success: false,
                 message: "Rejection reason is required (min 10 characters)"
@@ -44,7 +44,7 @@ export const requestTaskRejectionController = async (req, res) => {
 
         task.rejection = {
             requestedBy: loggedInUser._id,
-            reason,
+            reason: reason.trim(),
             requestedAt: new Date(),
             status: "PENDING"
         };
@@ -61,7 +61,6 @@ export const requestTaskRejectionController = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error requesting rejection",
-            error: error.message
         });
     }
 };

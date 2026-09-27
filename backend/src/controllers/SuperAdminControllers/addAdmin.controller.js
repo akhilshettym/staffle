@@ -28,7 +28,12 @@ export const addAdminController = async (req, res) => {
             });
         }
 
-        const existingUser = await userModel.findOne({ email });
+        const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
+        if (!normalizedEmail) {
+            return res.status(400).json({ success: false, message: "A valid email is required" });
+        }
+
+        const existingUser = await userModel.findOne({ email: normalizedEmail });
         if (existingUser) {
             return res.status(409).json({
                 success: false,
@@ -45,10 +50,14 @@ export const addAdminController = async (req, res) => {
             });
         }
 
+        if (organization.status !== "ACTIVE") {
+            return res.status(400).json({ success: false, message: "Admins can only be added to active organizations" });
+        }
+
         const newAdmin = await userModel.create({
             firstName,
             lastName,
-            email,
+            email: normalizedEmail,
             password,
             dateOfBirth: parsedDOB,
             designation,
@@ -67,7 +76,6 @@ export const addAdminController = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Server error while adding admin",
-            error: error.message,
         });
     }
 };

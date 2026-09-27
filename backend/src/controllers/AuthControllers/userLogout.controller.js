@@ -1,11 +1,9 @@
+import { logoutCookieOptions } from "../../utils/cookieOptions.js";
+
 export async function userLogoutController(req, res) {
 
     try {
-        res.clearCookie("token", {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-        });
+        res.clearCookie("token", logoutCookieOptions);
 
         return res.status(200).json({
             success: true,
@@ -16,7 +14,6 @@ export async function userLogoutController(req, res) {
         return res.status(500).json({
             success: false,
             message: "Server error during logout",
-            error: error.message,
         });
     }
 }

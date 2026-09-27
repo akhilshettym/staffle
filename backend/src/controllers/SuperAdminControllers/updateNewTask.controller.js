@@ -60,7 +60,7 @@ export const updateNewTaskController = async (req, res) => {
     if (assignedTo) {
       const assignedUser = await userModel.findById(assignedTo);
 
-      if (!assignedUser || assignedUser.employmentStatus === "IN-ACTIVE") {
+      if (!assignedUser || assignedUser.role !== "EMPLOYEE" || assignedUser.employmentStatus !== "ACTIVE") {
         return res.status(404).json({
           success: false,
           message: "Assigned user not found",
@@ -94,7 +94,7 @@ export const updateNewTaskController = async (req, res) => {
 
       const now = new Date();
 
-      if (parsedDate < now) {
+      if (parsedDate <= now) {
         return res.status(400).json({
           success: false,
           message: "Cannot update task: due date is in the past",
@@ -128,7 +128,6 @@ export const updateNewTaskController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error updating the task",
-      error: error.message,
     });
   }
 };

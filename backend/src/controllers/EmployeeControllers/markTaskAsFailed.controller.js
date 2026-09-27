@@ -7,7 +7,7 @@ export const markTaskAsFailedController = async (req, res) => {
         const { reason } = req.body;
         const loggedInUser = req.user;
 
-        if (!reason || reason.trim().length < 10) {
+        if (typeof reason !== "string" || reason.trim().length < 10) {
             return res.status(400).json({
                 success: false,
                 message: "Failure reason is required (min 10 characters)"
@@ -43,7 +43,7 @@ export const markTaskAsFailedController = async (req, res) => {
         task.status = "FAILED";
 
         task.taskLifeCycle.failure = {
-            reason,
+            reason: reason.trim(),
             failedBy: loggedInUser._id,
         };
 
@@ -59,7 +59,6 @@ export const markTaskAsFailedController = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error marking task as failed",
-            error: error.message
         });
     }
 };

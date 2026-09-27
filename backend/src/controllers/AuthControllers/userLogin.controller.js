@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import userModel from "../../models/user.model.js";
 import orgModel from "../../models/org.model.js";
+import { authCookieOptions } from "../../utils/cookieOptions.js";
 
 export async function userLoginController(req, res) {
     try {
@@ -98,12 +99,7 @@ export async function userLoginController(req, res) {
             { expiresIn: "3d" }
         );
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: 3 * 24 * 60 * 60 * 1000,
-        });
+        res.cookie("token", token, authCookieOptions);
 
         return res.status(200).json({
             success: true,
@@ -116,15 +112,13 @@ export async function userLoginController(req, res) {
                 role: user.role,
                 fullName: user.fullName,
                 organizationId: user.organizationId
-            },
-            token
+            }
         });
 
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: "Server error during login",
-            error: error.message
+            message: "Server error during login"
         });
     }
 }

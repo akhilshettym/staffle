@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import userModel from "../../models/user.model.js";
 import orgModel from "../../models/org.model.js";
@@ -94,39 +93,18 @@ export async function createOrganizationController(req, res) {
 
         await session.commitTransaction();
 
-        const token = jwt.sign(
-            {
-                userId: newUser._id,
-                role: newUser.role,
-                orgId: newUser.organizationId,
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: "3d" }
-        );
-
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: 3 * 24 * 60 * 60 * 1000,
-        });
-
         return res.status(201).json({
             success: true,
             message: "Organization and admin account created successfully",
             organization: newOrg,
             user: newUser,
-            token,
         });
 
     } catch (error) {
-        console.log("TEST ERROR:", error)
         await session.abortTransaction();
         return res.status(500).json({
             success: false,
             message: "Server error during organization creation",
-            error:
-                process.env.NODE_ENV === "development" ? error.message : undefined,
         });
 
     } finally {

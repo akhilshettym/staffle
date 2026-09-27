@@ -36,7 +36,6 @@ export const deleteTaskController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error deleting the task",
-      error: error.message,
     });
   }
 };

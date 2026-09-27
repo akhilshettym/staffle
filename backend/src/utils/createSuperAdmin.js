@@ -7,10 +7,7 @@ export const createSuperAdmin = async () => {
         const emailFromEnv = process.env.SUPER_ADMIN_EMAIL.toLowerCase();
         const passwordFromEnv = process.env.SUPER_ADMIN_PASSWORD;
 
-        if (!emailFromEnv || !passwordFromEnv) {
-            console.log("SUPER_ADMIN credentials missing");
-            return;
-        }
+        if (!firstNameFromEnv || !emailFromEnv || !passwordFromEnv) throw new Error("Super admin configuration is missing");
 
         const existingSuperAdmin = await userModel.findOne({ role: "SUPER_ADMIN" });
 
@@ -28,16 +25,9 @@ export const createSuperAdmin = async () => {
             });
 
             console.log("Super Admin created");
-        } else {
-            existingSuperAdmin.firstName = firstNameFromEnv;
-            existingSuperAdmin.email = emailFromEnv;
-            existingSuperAdmin.password = passwordFromEnv;
-            await existingSuperAdmin.save();
-
-            console.log("Super Admin updated");
         }
 
     } catch (error) {
-        console.error("Error creating/updating super admin:", error);
+        throw error;
     }
 };

@@ -21,12 +21,12 @@ export const markTaskAsCompletedController = async (req, res) => {
         if (task.assignedTo.toString() !== loggedInUser._id.toString()) {
             return res.status(403).json({
                 success: false,
-                message: "You are not authorized to accept this task",
+                message: "You are not authorized to complete this task",
             });
         }
 
         if (task.status !== "IN_PROGRESS") {
-            return res.status(403).json({
+            return res.status(400).json({
                 success: false,
                 message: "Only tasks IN_PROGRESS can be marked as COMPLETED",
             });
@@ -46,7 +46,6 @@ export const markTaskAsCompletedController = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error marking the task as completed",
-            error: error.message,
         });
     }
 };

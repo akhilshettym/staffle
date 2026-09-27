@@ -61,6 +61,9 @@ export const updateTaskController = async (req, res) => {
           message: "Assigned user does not belong to your organization",
         });
       }
+      if (assignedUser.role !== "EMPLOYEE" || assignedUser.employmentStatus !== "ACTIVE") {
+        return res.status(400).json({ success: false, message: "Assigned user must be an active employee" });
+      }
       task.assignedTo = assignedTo;
     }
 
@@ -78,7 +81,7 @@ export const updateTaskController = async (req, res) => {
       }
 
       const now = new Date();
-      if (parsedDate < now) {
+      if (parsedDate <= now) {
         return res.status(400).json({
           success: false,
           message: "Cannot update task: due date is in the past. Please provide a valid due date.",
@@ -111,7 +114,6 @@ export const updateTaskController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error updating the task",
-      error: error.message,
     });
   }
 };

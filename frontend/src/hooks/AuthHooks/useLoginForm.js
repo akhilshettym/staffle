@@ -33,11 +33,10 @@ const useLoginForm = () => {
 
       const response = await login(payload);
 
-      const token = response?.token;
       const user = response?.user;
       const role = user?.role;
 
-      dispatch(setCredentials({ token, user, role }));
+      dispatch(setCredentials({ user, role }));
 
       if (role === "ADMIN" || role === "EMPLOYEE") {
         dispatch(fetchOrganization());

@@ -11,6 +11,7 @@ import { addEmployeeController } from "../controllers/AdminControllers/addEmploy
 import { deactivateEmployeeController } from "../controllers/AdminControllers/deactivateEmployee.controller.js";
 import { reactivateEmployeeController } from "../controllers/AdminControllers/reactivateEmployee.controller.js";
 import { reviewTaskRejectionController } from "../controllers/AdminControllers/reviewTaskRejection.controller.js";
+import { validateObjectIdParams } from "../middleware/security.middleware.js";
 
 const router = express.Router();
 
@@ -18,24 +19,24 @@ const router = express.Router();
 router.post("/add-employee", authMiddleware, requireAdmin, requirePermission(PERMISSIONS.CREATE_EMPLOYEE), addEmployeeController);
 
 /* PATCH /api/admin/deactivate-employee/:empId */
-router.patch("/deactivate-employee/:empId", authMiddleware, requireAdmin, requirePermission(PERMISSIONS.DEACTIVATE_EMPLOYEE), deactivateEmployeeController);
+router.patch("/deactivate-employee/:empId", validateObjectIdParams("empId"), authMiddleware, requireAdmin, requirePermission(PERMISSIONS.DEACTIVATE_EMPLOYEE), deactivateEmployeeController);
 
 /* PATCH /api/admin/reactivate-employee/:empId */
-router.patch("/reactivate-employee/:empId", authMiddleware, requireAdmin, requirePermission(PERMISSIONS.REACTIVATE_EMPLOYEE), reactivateEmployeeController);
+router.patch("/reactivate-employee/:empId", validateObjectIdParams("empId"), authMiddleware, requireAdmin, requirePermission(PERMISSIONS.REACTIVATE_EMPLOYEE), reactivateEmployeeController);
 
 /* PATCH /api/admin/update-admin/:adminId */
-router.patch("/update-admin/:adminId", authMiddleware, requireAdmin, requirePermission(PERMISSIONS.UPDATE_ADMIN), updateAdminController);
+router.patch("/update-admin/:adminId", validateObjectIdParams("adminId"), authMiddleware, requireAdmin, requirePermission(PERMISSIONS.UPDATE_ADMIN), updateAdminController);
 
 /* PATCH /api/admin/tasks/review-task-rejection/:taskId */
-router.patch("/tasks/review-task-rejection/:taskId", authMiddleware, requireAdmin, requirePermission(PERMISSIONS.REVIEW_REJECT_TASK), reviewTaskRejectionController);
+router.patch("/tasks/review-task-rejection/:taskId", validateObjectIdParams("taskId"), authMiddleware, requireAdmin, requirePermission(PERMISSIONS.REVIEW_REJECT_TASK), reviewTaskRejectionController);
 
 /* POST /api/admin/tasks/create-task */
 router.post("/tasks/create-task", authMiddleware, requireAdmin, requirePermission(PERMISSIONS.CREATE_TASK), createTaskController);
 
 /* PATCH /api/admin/tasks/update-task/:taskId */
-router.patch("/tasks/update-task/:taskId", authMiddleware, requireAdmin, requirePermission(PERMISSIONS.UPDATE_TASK), updateTaskController);
+router.patch("/tasks/update-task/:taskId", validateObjectIdParams("taskId"), authMiddleware, requireAdmin, requirePermission(PERMISSIONS.UPDATE_TASK), updateTaskController);
 
 /* DELETE /api/admin/tasks/delete-task/:taskId */
-router.delete("/tasks/delete-task/:taskId", authMiddleware, requireAdmin, requirePermission(PERMISSIONS.DELETE_TASK), deleteTaskController);
+router.delete("/tasks/delete-task/:taskId", validateObjectIdParams("taskId"), authMiddleware, requireAdmin, requirePermission(PERMISSIONS.DELETE_TASK), deleteTaskController);
 
 export default router;

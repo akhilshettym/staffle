@@ -21,6 +21,10 @@ export const updateAdminController = async (req, res) => {
             });
         }
 
+        if (adminToUpdate.role !== "ADMIN") {
+            return res.status(403).json({ success: false, message: "Only admin accounts can be updated" });
+        }
+
         if (adminToUpdate.employmentStatus !== "ACTIVE") {
             return res.status(400).json({
                 success: false,
@@ -35,15 +39,16 @@ export const updateAdminController = async (req, res) => {
             });
         }
 
-        if (email && email !== adminToUpdate.email) {
-            const existingEmail = await userModel.findOne({ email });
+        if (typeof email === "string" && email.toLowerCase() !== adminToUpdate.email) {
+            const normalizedEmail = email.trim().toLowerCase();
+            const existingEmail = await userModel.findOne({ email: normalizedEmail });
             if (existingEmail && existingEmail._id.toString() !== adminToUpdate._id.toString()) {
                 return res.status(409).json({
                     success: false,
                     message: "Email already in use",
                 });
             }
-            adminToUpdate.email = email;
+            adminToUpdate.email = normalizedEmail;
         }
 
         if (firstName !== undefined) adminToUpdate.firstName = firstName;
@@ -80,7 +85,6 @@ export const updateAdminController = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error updating admin details",
-            error: error.message
         });
     }
 };

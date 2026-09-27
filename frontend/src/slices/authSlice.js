@@ -4,7 +4,7 @@ const storedUser = JSON.parse(localStorage.getItem("user"));
 
 const initialState = {
   user: storedUser?.user || null,
-  token: storedUser?.token || null,
+  token: Boolean(storedUser?.user),
   role: storedUser?.role || null,
 
   loading: false,
@@ -18,13 +18,14 @@ const authSlice = createSlice({
   reducers: {
 
     setCredentials: (state, action) => {
-      const { user, token, role } = action.payload;
+      const { user, role } = action.payload;
 
       state.user = user;
-      state.token = token;
+      state.token = Boolean(user);
       state.role = role;
 
-      localStorage.setItem( "user", JSON.stringify({ user, token, role }))},
+      localStorage.setItem("user", JSON.stringify({ user, role }));
+    },
 
       
     logout: (state) => {

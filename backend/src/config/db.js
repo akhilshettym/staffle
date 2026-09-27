@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
-    // mongoose.set("sanitizeFilter", true);
+    mongoose.set("sanitizeFilter", true);
+    mongoose.set("strictQuery", true);
 
     mongoose.connection.on("connected", () => {
         console.log("MongoDB lifecycle event: Connection established successfully.");

@@ -63,7 +63,6 @@ export const deactivateEmployeeController = async (req, res) => {
         return res.status(400).json({
             success: false,
             message: "Error removing employee",
-            error: error.message,
         });
     }
 };

@@ -10,6 +10,15 @@ export const createTaskController = async (req, res) => {
 
     const loggedInUser = req.user;
 
+    if (![title, category, description, assignedTo, dueDate, priority].every(Boolean)) {
+      return res.status(400).json({ success: false, message: "All task fields are required" });
+    }
+
+    const parsedDueDate = new Date(dueDate);
+    if (Number.isNaN(parsedDueDate.getTime()) || parsedDueDate <= new Date()) {
+      return res.status(400).json({ success: false, message: "Due date must be in the future" });
+    }
+
     const organization = await orgModel.findById(loggedInUser.organizationId);
 
     if (!organization) {
@@ -45,7 +54,7 @@ export const createTaskController = async (req, res) => {
       });
     }
 
-    if (assignedUser.employmentStatus === "IN-ACTIVE") {
+    if (assignedUser.role !== "EMPLOYEE" || assignedUser.employmentStatus !== "ACTIVE") {
       return res.status(400).json({
         success: false,
         message: "Employee is inactive",
@@ -59,7 +68,7 @@ export const createTaskController = async (req, res) => {
       description,
       organizationId: loggedInUser.organizationId,
       assignedTo,
-      dueDate,
+      dueDate: parsedDueDate,
       priority,
     });
 
@@ -74,7 +83,6 @@ export const createTaskController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error creating the task",
-      error: error.message,
     });
   }
 };

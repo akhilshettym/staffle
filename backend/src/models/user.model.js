@@ -95,6 +95,11 @@ const userSchema = new mongoose.Schema(
             uppercase: true,
             index: true,
         },
+
+        employmentStatusChangedAt: {
+            type: Date,
+            default: null,
+        },
     },
     {
         timestamps: true,
