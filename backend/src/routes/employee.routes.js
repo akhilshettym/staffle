@@ -31,7 +31,7 @@ router.patch("/tasks/mark-as-failed/:taskId", validateObjectIdParams("taskId"), 
 router.patch("/update-employee/:employeeId", validateObjectIdParams("employeeId"), authMiddleware, requirePermission(PERMISSIONS.UPDATE_EMPLOYEE), updateEmployeeController);
 
 /* GET /api/employee/get-employees */
-router.get("/get-employees", authMiddleware, requireAdmin, requirePermission(PERMISSIONS.VIEW_EMPLOYEES), getOrganizationUsers);
+router.get("/get-employees", authMiddleware, requirePermission(PERMISSIONS.VIEW_EMPLOYEES), getOrganizationUsers);
 
 /* GET /api/employee/get-inactive-employees */
 router.get("/get-inactive-employees", authMiddleware, requireAdmin, requirePermission(PERMISSIONS.VIEW_EMPLOYEES), getOrganizationInactiveUsers);
