@@ -21,9 +21,11 @@ const parseOrigins = (value) =>
         .filter(Boolean) || [];
 
 const isProduction = process.env.NODE_ENV === "production";
+
 const allowedOrigins = isProduction
     ? parseOrigins(process.env.CLIENT_URL)
     : ["http://localhost:3000", "http://localhost:5173", ...parseOrigins(process.env.CLIENT_URL)];
+
 const isLocalDeployment = parseOrigins(process.env.CLIENT_URL).some((origin) => {
     try {
         return ["localhost", "127.0.0.1", "::1"].includes(new URL(origin).hostname);
@@ -31,6 +33,7 @@ const isLocalDeployment = parseOrigins(process.env.CLIENT_URL).some((origin) => 
         return false;
     }
 });
+
 const isLoopbackDevelopmentOrigin = (origin) => {
     if (isProduction && !isLocalDeployment) return false;
 
@@ -43,6 +46,7 @@ const isLoopbackDevelopmentOrigin = (origin) => {
 };
 
 app.use(securityHeaders);
+
 app.use(cors({
         origin: (origin, callback) => {
             if (!origin || allowedOrigins.includes(origin) || isLoopbackDevelopmentOrigin(origin)) {
