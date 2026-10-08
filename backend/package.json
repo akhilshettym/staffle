@@ -5,9 +5,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
+    "jest": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "dev": "npx nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "lint": "eslint .",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "validate": "npm run format:check && npm run lint && npm run jest"
   },
   "jest": {
     "testEnvironment": "node",
@@ -31,12 +35,17 @@
     "nodemon": "^3.1.14"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
+    "eslint": "^10.11.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.12.0",
     "jest": "^30.3.0",
     "mongodb-memory-server": "^11.0.1",
+    "prettier": "^3.9.9",
     "supertest": "^7.2.2"
   }
 }

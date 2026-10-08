@@ -74,7 +74,9 @@ const useCreateOrganizationForm = () => {
 
             dispatch(setCredentials({ token, user }));
 
-            navigate("/complete-organization");
+            // navigate("/complete-organization");
+            // toast.success("Organization Registered Successfully...");
+            navigate("/register-organization");
 
         } catch (error) {
             const message = error?.response?.data?.message || error.message || "Something went wrong";
